@@ -1,370 +1,82 @@
-/* RESET GENERAL: Elimina bordes y márgenes predeterminados del navegador */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-/* ESTILO DEL FONDO Y CUERPO */
-body {
-    background: #1c1326; /* Fondo oscuro elegante */
-    font-family: 'Georgia', serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden;
-    padding: 20px;
-}
-
-/* CONFIGURACIÓN 3D Y POSICIONAMIENTO DEL LIBRO */
-.escena-libro {
-    width: 300px;
-    height: 460px;
-    perspective: 1500px; /* Crea el efecto de profundidad 3D */
-    margin-left: 140px; /* Desplaza el libro a la derecha para dar espacio al desdoblar hojas hacia la izquierda */
-}
-
-.libro {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-}
-
-/* ESTILOS DE LAS HOJAS */
-.pagina {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform-origin: left center; /* El eje de giro se sitúa a la izquierda (el lomo) */
-    transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); /* Transición suave de giro */
-}
-
-/* CARAS FRONTAL Y TRASERA DE LAS HOJAS */
-.cara {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    backface-visibility: hidden; /* Oculta el reverso mientras se mira de frente */
-    border-radius: 8px 16px 16px 8px;
-    padding: 20px;
-    background: #fffdf9; /* Color de papel hueso/crema */
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.3);
-    border-right: 2px solid #e0d6c3;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-/* Giro inicial de la cara trasera */
-.cara.trasera {
-    transform: rotateY(180deg);
-    border-radius: 16px 8px 8px 16px;
-    border-left: 2px solid #e0d6c3;
-    border-right: none;
-}
-
-/* CLASE QUE EJECUTA LA ANIMACIÓN DE GIRO 3D (Activada mediante JavaScript) */
-.pagina.volteada {
-    transform: rotateY(-180deg);
-}
-
-/* DETALLE DEL LOMO EN EL CENTRO */
-.lomo {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 12px;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.02));
-}
-
-/* ORGANIZACIÓN INTERNA DE CONTENIDO (Centrado perfecto) */
-.contenido-pagina {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Alineación vertical central */
-    align-items: center;
-    text-align: center;
-    gap: 12px; /* Separación constante entre texto, imágenes y componentes */
-    padding: 10px 5px;
-}
-
-/* INDICADOR TEXTUAL INFERIOR */
-.indicador-paso {
-    font-size: 0.75rem;
-    color: #8e24aa;
-    font-weight: bold;
-    margin-top: auto; /* Se acomoda suavemente en la parte inferior de la hoja */
-}
-
-/* ESTILO DE LA PORTADA PRINCIPAL */
-.portada .frontal {
-    background: linear-gradient(135deg, #f48fb1, #ce93d8);
-    color: #ffffff;
-}
-
-.portada h1 {
-    color: #ffffff;
-    font-size: 1.2rem;
-}
-
-.subtitulo {
-    color: #f3e5f5;
-    font-size: 0.95rem;
-}
-
-.corazon-destacado {
-    font-size: 2rem;
-}
-
-/* ENCABEZADOS Y TEXTOS GENERALES DE HOJAS */
-h2 {
-    color: #46a86c;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    border-bottom: 2px dashed #e1bee7;
-    padding-bottom: 5px;
-    width: 100%;
-}
-
-p {
-    color: #4a3b32;
-    font-size: 0.85rem;
-    line-height: 1.4;
-}
-
-.frase {
-    color: #5934c8;
-    font-weight: 500;
-}
-
-/* AJUSTE DE TAMAÑO Y BORDES EN IMÁGENES */
-.pagina img {
-    max-width: 85%;
-    max-height: 200px;
-    border-radius: 10px;
-    object-fit: cover;
-}
-
-/* LISTA Y TARJETAS DE CUPONES */
-.cupones-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    text-align: left;
-    width: 100%;
-    margin: auto 0;
-}
-
-.cupon {
-    background: #fdf5e6;
-    padding: 10px;
-    border-radius: 8px;
-    border-left: 4px solid #a51acb;
-    font-size: 0.8rem;
-}
-
-.condicion {
-    font-size: 0.75rem;
-    color: #666;
-    margin-top: 2px;
-}
-
-/* ESTILO REPRODUCTOR TIPO SPOTIFY */
-.reproductor-card {
-    background: linear-gradient(180deg, #c3832d 0%, #8a5314 100%);
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-family: system-ui, sans-serif;
-}
-
-.portada-cancion {
-    width: 100% !important;
-    height: 110px !important;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-.info-cancion {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-}
-
-.texto-cancion h3 {
-    font-size: 0.9rem;
-    margin: 0;
-}
-
-.texto-cancion p {
-    font-size: 0.75rem;
-    color: #f0e0d0;
-}
-
-.barra-progreso-container input[type="range"] {
-    width: 100%;
-    accent-color: #ffffff;
-}
-
-.tiempos {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.7rem;
-    color: #f0e0d0;
-}
-
-.controles-musica {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-}
-
-.btn-ctrl {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.btn-play {
-    background-color: #ffffff;
-    color: #8a5314;
-    border: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    font-size: 0.85rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-/* SECCIÓN PREGUNTA FINAL Y BOTONES */
-.card-propuesta {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin: auto 0;
-}
-
-.corazon-animado {
-    font-size: 2.2rem;
-}
-
-.botones-propuesta {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.botones-propuesta button {
-    padding: 8px 18px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-#btn-si {
-    background-color: #e63946;
-    color: #ffffff;
-}
-
-#btn-no {
-    background-color: #6c757d;
-    color: #ffffff;
-}
-
-/* BOTONES DE NAVEGACIÓN INFERIORES FUERA DEL LIBRO */
-.controles-libro {
-    margin-top: 25px;
-    display: flex;
-    gap: 15px;
-    z-index: 10000;
-}
-
-.controles-libro button {
-    background: #8e24aa;
-    color: #ffffff;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.controles-libro button:active {
-    transform: scale(0.95);
-}
-
-/* ADAPTACIÓN EXCLUSIVA PARA NAVEGADOR DE CELULARES */
+/* AJUSTE PERFECTO Y CENTRADO PARA CELULARES */
 @media screen and (max-width: 600px) {
     body {
         padding: 10px 5px;
+        overflow-x: hidden;
     }
 
+    /* Reducimos el tamaño para que ambas páginas (izquierda y derecha) quepan juntas */
     .escena-libro {
-        width: 82vw;
-        max-width: 290px;
-        height: 65vh;
-        max-height: 440px;
-        margin-left: 0; /* Elimina el margen desfasado en móviles para que quepa bien en pantalla */
+        width: 170px; /* Tamaño exacto de una hoja */
+        height: 380px;
+        margin-left: 155px !important; /* Centra el punto medio del libro en la pantalla */
+        perspective: 1000px;
     }
 
     .cara {
-        padding: 12px;
+        padding: 10px 8px;
     }
 
     .contenido-pagina {
-        gap: 8px;
-        padding: 5px 2px;
+        gap: 6px;
+        padding: 2px;
     }
 
+    /* Escalado proporcional de elementos internos */
     .pagina img {
-        max-height: 140px;
+        max-height: 110px;
+        max-width: 95%;
     }
 
     .portada-cancion {
-        height: 90px !important;
+        height: 70px !important;
     }
 
-    p {
-        font-size: 0.8rem;
+    .reproductor-card {
+        padding: 6px;
+        gap: 4px;
+    }
+
+    .texto-cancion h3 {
+        font-size: 0.75rem;
+    }
+
+    .texto-cancion p {
+        font-size: 0.65rem;
+    }
+
+    h1 {
+        font-size: 0.95rem !important;
     }
 
     h2 {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
+        padding-bottom: 2px;
     }
 
+    p {
+        font-size: 0.68rem;
+        line-height: 1.2;
+    }
+
+    .cupon {
+        padding: 5px;
+        font-size: 0.68rem;
+    }
+
+    .condicion {
+        font-size: 0.6rem;
+    }
+
+    /* Botones de navegación abajo */
     .controles-libro {
-        margin-top: 15px;
+        margin-top: 20px;
+        gap: 8px;
     }
 
     .controles-libro button {
-        padding: 8px 14px;
-        font-size: 0.8rem;
+        padding: 8px 12px;
+        font-size: 0.75rem;
     }
 }
