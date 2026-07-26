@@ -10,7 +10,31 @@ const progress = document.getElementById('progress');
 const currentTimeEl = document.getElementById('current-time');
 const durationEl = document.getElementById('duration');
 
-// 1. INICIALIZAR Z-INDEX DE LAS HOJAS
+// 1. COMPROBAR SI YA RESPONDIÓ PREVIAMENTE (Guardado local)
+document.addEventListener('DOMContentLoaded', () => {
+    const respuestaGuardada = localStorage.getItem('respuesta_propuesta');
+    if (respuestaGuardada) {
+        mostrarRespuestaGuardada(respuestaGuardada);
+    }
+});
+
+function mostrarRespuestaGuardada(tipoRespuesta) {
+    const seccionPregunta = document.getElementById('seccion-pregunta');
+    const seccionMensaje = document.getElementById('seccion-mensaje');
+    const seccionMensajeNo = document.getElementById('seccion-mensaje-no');
+
+    if (seccionPregunta) seccionPregunta.style.display = 'none';
+
+    if (tipoRespuesta === 'si' && seccionMensaje) {
+        if (seccionMensajeNo) seccionMensajeNo.style.display = 'none';
+        seccionMensaje.style.display = 'block';
+    } else if (tipoRespuesta === 'no' && seccionMensajeNo) {
+        if (seccionMensaje) seccionMensaje.style.display = 'none';
+        seccionMensajeNo.style.display = 'block';
+    }
+}
+
+// 2. INICIALIZAR Z-INDEX DE LAS HOJAS
 function actualizarZIndex() {
     paginas.forEach((pagina, index) => {
         if (index < paginaActual) {
@@ -22,7 +46,7 @@ function actualizarZIndex() {
 }
 actualizarZIndex();
 
-// 2. NAVEGACIÓN DEL LIBRO (Sin autoplay)
+// 3. NAVEGACIÓN DEL LIBRO
 function siguientePagina() {
     if (paginaActual < totalPaginas) {
         paginas[paginaActual].classList.add('volteada');
@@ -42,7 +66,6 @@ function paginaAnterior() {
 // Evento para pasar página al hacer clic en las hojas
 paginas.forEach((pagina) => {
     pagina.addEventListener('click', (e) => {
-        // Evita que cambie de página si se interactúa con botones, slider o tarjeta de propuesta
         if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('.card-propuesta') || e.target.closest('.reproductor-card')) {
             return;
         }
@@ -54,16 +77,16 @@ paginas.forEach((pagina) => {
     });
 });
 
-// 3. CONTROL DE MÚSICA (Solo al hacer clic en Play)
+// 4. CONTROL DE MÚSICA
 if (playBtn && audio) {
     playBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Previene voltear la página al dar clic al botón
+        e.stopPropagation();
         
         if (audio.paused) {
             audio.play().then(() => {
                 playBtn.textContent = '⏸';
             }).catch(err => {
-                console.error("Error al intentar reproducir:", err);
+                console.error("Error al intentar reproducir audio:", err);
             });
         } else {
             audio.pause();
@@ -72,7 +95,6 @@ if (playBtn && audio) {
     });
 }
 
-// Actualizar barra de progreso y tiempos
 if (audio && progress) {
     audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
@@ -95,28 +117,13 @@ function formatearTiempo(segundos) {
     return `${min}:${seg < 10 ? '0' : ''}${seg}`;
 }
 
-// 4. LÓGICA DE LA PROPUESTA
+// 5. LÓGICA DE LA PROPUESTA Y GUARDADO DEFINITIVO
 function responderSi() {
-    const seccionPregunta = document.getElementById('seccion-pregunta');
-    const seccionMensaje = document.getElementById('seccion-mensaje');
-    
-    if (seccionPregunta && seccionMensaje) {
-        seccionPregunta.style.display = 'none';
-        seccionMensaje.style.display = 'block';
-    }
+    localStorage.setItem('respuesta_propuesta', 'si');
+    mostrarRespuestaGuardada('si');
 }
 
-// Botón "No" esquivo
-const btnNo = document.getElementById('btn-no');
-if (btnNo) {
-    btnNo.addEventListener('mouseover', moverBotonNo);
-    btnNo.addEventListener('touchstart', moverBotonNo);
-}
-
-function moverBotonNo() {
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
-    btnNo.style.position = 'fixed';
-    btnNo.style.left = `${x}px`;
-    btnNo.style.top = `${y}px`;
+function responderNo() {
+    localStorage.setItem('respuesta_propuesta', 'no');
+    mostrarRespuestaGuardada('no');
 }
