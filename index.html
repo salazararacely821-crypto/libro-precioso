@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Precioso ❤️</title>
+    <!-- Vinculación con la hoja de estilos CSS -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <!-- REPRODUCTOR DE AUDIO (Oculto, controlado mediante JS) -->
+    <audio id="audio" src="musica/Canserbero.mp3" preload="auto"></audio>
+
+    <!-- ESCENA 3D: Contenedor principal para la perspectiva tridimensional -->
+    <div class="escena-libro">
+        <div class="libro" id="libro">
+
+            <!-- HOJA 1: PORTADA / ANTES DE COMENZAR -->
+            <div class="pagina portada">
+                <!-- Cara frontal de la hoja (Se ve al inicio) -->
+                <div class="cara frontal">
+                    <div class="lomo"></div>
+                    <div class="contenido-pagina">
+                        <h1>ERES TODO LO QUE NECESITO EN ESTA VIDA</h1>
+                        <p class="subtitulo">¡Para mi precioso!</p>
+                        <div class="corazon-destacado">❤️</div>
+                        <img src="imagen/428942929326c43c7695f1c5be52136d.gif" alt="Portada">
+                        <span class="indicador-paso">Toca para abrir ➔</span>
+                    </div>
+                </div>
+                <!-- Cara trasera (Se ve al dar vuelta a la Hoja 1) -->
+                <div class="cara trasera">
+                    <div class="contenido-pagina">
+                        <h2>Antes de comenzar</h2>
+                        <p class="frase"><i>"En un universo lleno de historias, la nuestra siempre será mi favorita..."</i></p>
+                        <img src="imagen/gif-heart-51.gif" alt="mi precioso">
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA 2: EL DÍA QUE TODO COMENZÓ / MIS OJITOS -->
+            <div class="pagina">
+                <div class="cara frontal">
+                    <div class="lomo"></div>
+                    <div class="contenido-pagina">
+                        <h2>¡EL DÍA QUE TODO COMENZÓ!</h2>
+                        <img src="imagen/calendario.png" alt="Calendario">
+                        <span class="indicador-paso">Toca para voltear ➔</span>
+                    </div>
+                </div>
+                <div class="cara trasera">
+                    <div class="contenido-pagina">
+                        <h2>Mis ojitos solo te ven a ti mi Precioso</h2>
+                        <p>Te elegí a ti porque me di cuenta de que vales la pena, vales los riesgos y vales toda la vida.</p>
+                        <img src="imagen/Snapchat-677721239.jpg" alt="mi precioso">
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA 3: RECORDATORIO / CUPONES DE AMOR -->
+            <div class="pagina">
+                <div class="cara frontal">
+                    <div class="lomo"></div>
+                    <div class="contenido-pagina">
+                        <h2>RECORDATORIO</h2>
+                        <p class="frase"><i>Cada día me gustas más ❤️</i></p>
+                        <p>Gracias por ser mi lugar seguro, gracias por quererme tanto, por demostrarme que haberte elegido fue una buena elección y no me arrepiento.</p>
+                        <img src="imagen/p.jpg" alt="Recordatorio">
+                        <span class="indicador-paso">Toca para voltear ➔</span>
+                    </div>
+                </div>
+                <div class="cara trasera">
+                    <div class="contenido-pagina">
+                        <h2>Vales de Amor (Cupones Canjeables)</h2>
+                        <div class="cupones-lista">
+                            <div class="cupon">
+                                🎟️ <b>Vale por un beso cuando y donde quieras</b>
+                                <p class="condicion">Canjeable de inmediato, no importa si estamos en público.</p>
+                            </div>
+                            <div class="cupon">
+                                🎟️ <b>Vale por recordar lo mucho que te amo</b>
+                                <p class="condicion">Canjeable infinitas veces.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA 4: CÁLCULOS / REPRODUCTOR SPOTIFY -->
+            <div class="pagina">
+                <div class="cara frontal">
+                    <div class="lomo"></div>
+                    <div class="contenido-pagina">
+                        <h2>Según mis cálculos</h2>
+                        <img src="imagen/cal.png" alt="Cálculos">
+                        <p class="frase"><i>¡NI MODOS PRECIOSO YA LLEGASTE A MI VIDA Y DESLLEGADA YA NO HAY❤️!</i></p>
+                        <span class="indicador-paso">Toca para voltear ➔</span>
+                    </div>
+                </div>
+                <div class="cara trasera">
+                    <div class="contenido-pagina">
+                        <!-- Tarjeta interactiva del reproductor de música -->
+                          <div>
+                                <H2>CREO QUE CON ESTA CONCION TE DIGO TODO LO QUE SIENTO POR TI Y LO QUE ME HACES SENTIR MI NIÑO ❤️</H2>
+                            </div>
+                        <div class="reproductor-card">
+                            <img src="imagen/cancion.jpg" alt="Portada" class="portada-cancion">
+                            <div class="info-cancion">
+                                <div class="texto-cancion">
+                                    <h3>Querer Querernos</h3>
+                                    <p>Canserbero</p>
+                                </div>
+                                <span class="corazon-like">❤️</span>
+                            </div>
+                            <div class="barra-progreso-container">
+                                <input type="range" id="progress" value="0" min="0" step="0.1">
+                                <div class="tiempos">
+                                    <span id="current-time">0:00</span>
+                                    <span id="duration">3:58</span>
+                                </div>
+                            </div>
+                            <div class="controles-musica">
+                                <button class="btn-ctrl" type="button">⏮</button>
+                                <button id="play-btn" class="btn-play" type="button">▶</button>
+                                <button class="btn-ctrl" type="button">⏭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOJA 5: PREGUNTA FINAL Y RESPUESTAS -->
+            <div class="pagina pagina-final">
+                <div class="cara frontal">
+                    <div class="lomo"></div>
+                    <div class="contenido-pagina">
+                        <h2>Y FINALMENTE LA RAZÓN VERDADERA POR LA QUE HICE ESTE LIBRO PARA TI MI AMOR ES PORQUE TENGO QUE PREGUNTARTE ALGO... 🫣</h2>
+                        <P>PERO</P>
+                        <img src="imagen/cc.png" alt="Flecha" class="img-flecha">
+                    </div>
+                </div>
+                <div class="cara trasera">
+                    <div class="contenido-pagina">
+                        <div class="card-propuesta">
+                            <!-- Sección inicial con la pregunta -->
+                            <div id="seccion-pregunta">
+                                <div class="corazon-animado">💖</div>
+                                <h1>¿Quieres ser mi novio, precioso?</h1>
+                                <div class="botones-propuesta">
+                                    <button id="btn-si" type="button" onclick="responderSi()">¡Sí! 🥰</button>
+                                    <button id="btn-no" type="button">No 😢</button>
+                                </div>
+                            </div>
+
+                            <!-- Mensaje de confirmación (oculto por defecto) -->
+                            <div id="seccion-mensaje" class="mensaje-exito" style="display: none;">
+                                <div class="corazon-animado">🥰✨</div>
+                                <h2>¡Sabía que dirías que sí, mi precioso! ❤️</h2>
+                                <p>Prometo hacerte la persona más feliz del mundo mundial. ¡Gracias por hacerme tan feliz! 💕</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CONTROLES NAVEGACIÓN FLOTANTES -->
+    <div class="controles-libro">
+        <button id="btn-prev" onclick="paginaAnterior()">◀ Hoja Anterior</button>
+        <button id="btn-next" onclick="siguientePagina()">Siguiente Hoja ▶</button>
+    </div>
+
+    <!-- Vinculación del script del proyecto -->
+    <script src="reproductor.js"></script>
+</body>
+</html>
