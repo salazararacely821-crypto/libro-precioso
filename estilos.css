@@ -60,7 +60,6 @@ body {
     border-right: 2px solid #e0d6c3;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
 
 /* Giro inicial de la cara trasera */
@@ -318,53 +317,4 @@ p {
 
 .controles-libro button:active {
     transform: scale(0.95);
-}
-
-/* ADAPTACIÓN EXCLUSIVA PARA NAVEGADOR DE CELULARES */
-@media screen and (max-width: 600px) {
-    body {
-        padding: 10px 5px;
-    }
-
-    .escena-libro {
-        width: 82vw;
-        max-width: 290px;
-        height: 65vh;
-        max-height: 440px;
-        margin-left: 0; /* Elimina el margen desfasado en móviles para que quepa bien en pantalla */
-    }
-
-    .cara {
-        padding: 12px;
-    }
-
-    .contenido-pagina {
-        gap: 8px;
-        padding: 5px 2px;
-    }
-
-    .pagina img {
-        max-height: 140px;
-    }
-
-    .portada-cancion {
-        height: 90px !important;
-    }
-
-    p {
-        font-size: 0.8rem;
-    }
-
-    h2 {
-        font-size: 0.85rem;
-    }
-
-    .controles-libro {
-        margin-top: 15px;
-    }
-
-    .controles-libro button {
-        padding: 8px 14px;
-        font-size: 0.8rem;
-    }
 }
