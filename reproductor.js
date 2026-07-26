@@ -1,129 +1,122 @@
-// Variables globales
 let paginaActual = 0;
 const paginas = document.querySelectorAll('.pagina');
 const totalPaginas = paginas.length;
 
-// Elementos del reproductor
-const audio = document.getElementById('audio');
-const playBtn = document.getElementById('play-btn');
-const progress = document.getElementById('progress');
-const currentTimeEl = document.getElementById('current-time');
-const durationEl = document.getElementById('duration');
-
-// 1. COMPROBAR SI YA RESPONDIÓ PREVIAMENTE (Guardado local)
-document.addEventListener('DOMContentLoaded', () => {
-    const respuestaGuardada = localStorage.getItem('respuesta_propuesta');
-    if (respuestaGuardada) {
-        mostrarRespuestaGuardada(respuestaGuardada);
-    }
-});
-
-function mostrarRespuestaGuardada(tipoRespuesta) {
-    const seccionPregunta = document.getElementById('seccion-pregunta');
-    const seccionMensaje = document.getElementById('seccion-mensaje');
-    const seccionMensajeNo = document.getElementById('seccion-mensaje-no');
-
-    if (seccionPregunta) seccionPregunta.style.display = 'none';
-
-    if (tipoRespuesta === 'si' && seccionMensaje) {
-        if (seccionMensajeNo) seccionMensajeNo.style.display = 'none';
-        seccionMensaje.style.display = 'block';
-    } else if (tipoRespuesta === 'no' && seccionMensajeNo) {
-        if (seccionMensaje) seccionMensaje.style.display = 'none';
-        seccionMensajeNo.style.display = 'block';
-    }
-}
-
-// 2. INICIALIZAR Z-INDEX DE LAS HOJAS
-function actualizarZIndex() {
+function inicializarPaginas() {
     paginas.forEach((pagina, index) => {
-        if (index < paginaActual) {
-            pagina.style.zIndex = index + 1;
-        } else {
-            pagina.style.zIndex = totalPaginas - index;
-        }
+        pagina.style.zIndex = totalPaginas - index;
+        pagina.classList.remove('pasada');
     });
-}
-actualizarZIndex();
 
-// 3. NAVEGACIÓN DEL LIBRO
+    // Verificar si ya respondió anteriormente en este navegador
+    comprobarRespuestaGuardada();
+}
+
 function siguientePagina() {
-    if (paginaActual < totalPaginas) {
-        paginas[paginaActual].classList.add('volteada');
+    if (paginaActual < totalPaginas - 1) {
+        paginas[paginaActual].classList.add('pasada');
         paginaActual++;
-        actualizarZIndex();
     }
 }
 
 function paginaAnterior() {
     if (paginaActual > 0) {
         paginaActual--;
-        paginas[paginaActual].classList.remove('volteada');
-        actualizarZIndex();
+        paginas[paginaActual].classList.remove('pasada');
     }
 }
 
-// Evento para pasar página al hacer clic en las hojas
-paginas.forEach((pagina) => {
+paginas.forEach((pagina, index) => {
     pagina.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('.card-propuesta') || e.target.closest('.reproductor-card')) {
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.classList.contains('btn-play')) {
             return;
         }
-        if (pagina.classList.contains('volteada')) {
-            paginaAnterior();
-        } else {
+        if (index === paginaActual) {
             siguientePagina();
         }
     });
 });
 
-// 4. CONTROL DE MÚSICA
+/* REPRODUCTOR DE MÚSICA */
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('play-btn');
+const progress = document.getElementById('progress');
+const currentTimeEl = document.getElementById('current-time');
+const durationEl = document.getElementById('duration');
+
 if (playBtn && audio) {
-    playBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        
+    playBtn.addEventListener('click', () => {
         if (audio.paused) {
-            audio.play().then(() => {
-                playBtn.textContent = '⏸';
-            }).catch(err => {
-                console.error("Error al intentar reproducir audio:", err);
-            });
+            audio.play();
+            playBtn.textContent = '❚❚';
         } else {
             audio.pause();
             playBtn.textContent = '▶';
         }
     });
-}
 
-if (audio && progress) {
     audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
             const porcentaje = (audio.currentTime / audio.duration) * 100;
             progress.value = porcentaje;
-            if (currentTimeEl) currentTimeEl.textContent = formatearTiempo(audio.currentTime);
-            if (durationEl) durationEl.textContent = formatearTiempo(audio.duration);
+
+            let mins = Math.floor(audio.currentTime / 60);
+            let secs = Math.floor(audio.currentTime % 60);
+            if (secs < 10) secs = '0' + secs;
+            currentTimeEl.textContent = `${mins}:${secs}`;
         }
     });
 
     progress.addEventListener('input', () => {
-        const nuevoTiempo = (progress.value / 100) * audio.duration;
-        audio.currentTime = nuevoTiempo;
+        if (audio.duration) {
+            const nuevoTiempo = (progress.value / 100) * audio.duration;
+            audio.currentTime = nuevoTiempo;
+        }
     });
 }
 
-function formatearTiempo(segundos) {
-    const min = Math.floor(segundos / 60);
-    const seg = Math.floor(segundos % 60);
-    return `${min}:${seg < 10 ? '0' : ''}${seg}`;
-}
+/* ==========================================
+   RESPUESTAS DE LA PROPUESTA CON PERSISTENCIA
+   ========================================== */
 
-// 5. LÓGICA DE LA PROPUESTA Y GUARDADO DEFINITIVO
 function responderSi() {
-    localStorage.setItem('respuesta_propuesta', 'si');
-    mostrarRespuestaGuardada('si');
+    localStorage.setItem('respuestaPropuesta', 'si');
+    mostrarMensajeExito();
 }
 
 function responderNo() {
-    localStorage.setItem('respuesta_propuesta', 'no');
-    mostrarRespuestaGuardada('no');
+    localStorage.setItem('respuestaPropuesta', 'no');
+    mostrarMensajeNo();
 }
+
+function mostrarMensajeExito() {
+    const secPregunta = document.getElementById('seccion-pregunta');
+    const secMensaje = document.getElementById('seccion-mensaje');
+    const secMensajeNo = document.getElementById('seccion-mensaje-no');
+
+    if (secPregunta) secPregunta.style.display = 'none';
+    if (secMensajeNo) secMensajeNo.style.display = 'none';
+    if (secMensaje) secMensaje.style.display = 'block';
+}
+
+function mostrarMensajeNo() {
+    const secPregunta = document.getElementById('seccion-pregunta');
+    const secMensaje = document.getElementById('seccion-mensaje');
+    const secMensajeNo = document.getElementById('seccion-mensaje-no');
+
+    if (secPregunta) secPregunta.style.display = 'none';
+    if (secMensaje) secMensaje.style.display = 'none';
+    if (secMensajeNo) secMensajeNo.style.display = 'block';
+}
+
+// Al cargar, consulta si ya se guardó alguna respuesta previamente
+function comprobarRespuestaGuardada() {
+    const respuesta = localStorage.getItem('respuestaPropuesta');
+    if (respuesta === 'si') {
+        mostrarMensajeExito();
+    } else if (respuesta === 'no') {
+        mostrarMensajeNo();
+    }
+}
+
+inicializarPaginas();
